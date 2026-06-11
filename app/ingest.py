@@ -9,11 +9,6 @@ except :
     pdfplumber = None
 
 try :
-    import docx
-except :
-    docx = None
-
-try :
     import csv
 except :
     csv = None
@@ -28,19 +23,12 @@ def read_pdf(path) :
     if pdfplumber is None :
         return ''
     try :
-        with pdfplumber.open(path) as pdf_file:
-            text = [page.extract_text() for page in pdf_file.pages]
+        with pdfplumber.open(path) as pdf_file :
+            text = []
+            for page in pdf_file.pages :
+                    if page.extract_text != None :
+                        text.append(page.extract_text())
             return "\n".join(text)
-    except :
-        return ''
-
-
-def read_docx(path) :
-    if docx is None :
-        return ''
-    try :
-        doc = docx.Document(path)
-        return "\n".join(par.text for par in doc.paragraphs)
     except :
         return ''
     
@@ -48,15 +36,14 @@ def read_csv(path) :
     if csv is None :
         return ''
     try :
-        with open(path) as csv_file :
+        with open(path, 'r', encoding='utf-8', errors='ignore') as csv_file :
             reader = csv.reader(csv_file)
             text = [', '.join(row) for row in reader]
             return '\n'.join(text)
     except :
         return ''
 
-
-def chunk_text(text, chunk_size=800, overlap=200) :
+def chunk_text(text, chunk_size=800, overlap=120) :
     if not text :
         return []
     chunks = []
@@ -93,9 +80,7 @@ def ingest(data_path='corpus', store_path='corpus/chunks.jsonl') :
                     text = read_txt(filepath)
                 elif ext == '.pdf' :
                     text = read_pdf(filepath)
-                elif ext in ('.docx',) :
-                    text = read_docx(filepath)
-                elif ext in ('.csv',) :
+                elif ext == '.csv' :
                     text = read_csv(filepath)
                 else :
                     continue
