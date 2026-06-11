@@ -1,2 +1,4 @@
 /corpus
 .env
+.venv
+__pycache__
