@@ -13,6 +13,11 @@ try:
 except :
     docx = None
 
+try:
+    import csv
+except :
+    csv = None
+
 DetectorFactory.seed = 0
 
 def read_txt(path) :
@@ -40,6 +45,17 @@ def read_docx(path) :
     try :
         doc = docx.Document(path)
         return "\n".join(par.text for par in doc.paragraphs)
+    except :
+        return ''
+    
+def read_csv(path) :
+    if csv is None :
+        return ''
+    try :
+        with open(path) as csv_file :
+            reader = csv.reader(csv_file)
+            text = [', '.join(row) for row in reader]
+            return '\n'.join(text)
     except :
         return ''
 
@@ -83,6 +99,8 @@ def ingest(data_path='corpus', store_path='corpus/chunks.jsonl') :
                     text = read_pdf(filepath)
                 elif ext in ('.docx',) :
                     text = read_docx(filepath)
+                elif ext in ('.csv',) :
+                    text = read_csv(filepath)
                 else :
                     continue
 
