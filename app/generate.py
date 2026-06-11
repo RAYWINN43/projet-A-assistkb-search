@@ -1,8 +1,12 @@
 import os
+from dotenv import load_dotenv
 from google import genai
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+load_dotenv()
 
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
 def build_prompt(question: str, sources: list[dict]) -> str:
     context = "\n\n".join(
         [
