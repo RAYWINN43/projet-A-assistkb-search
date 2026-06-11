@@ -77,7 +77,16 @@ class QdrantStore:
     def client(self) -> Any:
         if self._client is None:
             QdrantClient, _, _, _ = _require_qdrant()
-            self._client = QdrantClient(url=self.url, api_key=self.api_key)
+            client_kwargs = {
+                "url": self.url,
+                "api_key": self.api_key,
+                "check_compatibility": False,
+            }
+            try:
+                self._client = QdrantClient(**client_kwargs)
+            except TypeError:
+                client_kwargs.pop("check_compatibility")
+                self._client = QdrantClient(**client_kwargs)
         return self._client
 
     def ensure_collection(self) -> None:
