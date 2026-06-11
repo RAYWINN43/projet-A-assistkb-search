@@ -98,9 +98,13 @@ def _load_chunks_jsonl(path: Path) -> list[Chunk]:
             if not text:
                 continue
             metadata = dict(data.get("metadata") or {})
-            if "source" not in metadata and data.get("source"):
-                metadata["source"] = data["source"]
-            metadata.setdefault("chunk_index", data.get("chunk_index", line_number - 1))
+            for key in ("source", "type", "position", "language"):
+                if key not in metadata and data.get(key) is not None:
+                    metadata[key] = data[key]
+            metadata.setdefault(
+                "chunk_index",
+                data.get("chunk_index", data.get("position", line_number - 1)),
+            )
             chunks.append(Chunk(id=data.get("id"), text=text, metadata=metadata))
 
     if not chunks:
