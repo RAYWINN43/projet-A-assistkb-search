@@ -3,17 +3,17 @@ import json
 from pathlib import Path
 from langdetect import detect, DetectorFactory
 
-try:
-    from PyPDF2 import PdfReader
+try :
+    import pdfplumber
 except :
-    PdfReader = None
+    pdfplumber = None
 
-try:
+try :
     import docx
 except :
     docx = None
 
-try:
+try :
     import csv
 except :
     csv = None
@@ -25,19 +25,15 @@ def read_txt(path) :
         return f.read()
 
 def read_pdf(path) :
-    if PdfReader is None :
+    if pdfplumber is None :
         return ''
-    text = []
     try :
-        reader = PdfReader(path)
-        for page in reader.pages :
-            try :
-                text.append(page.extract_text() or '')
-            except :
-                continue
+        with pdfplumber.open(path) as pdf_file:
+            text = [page.extract_text() for page in pdf_file.pages]
+            return "\n".join(text)
     except :
         return ''
-    return "\n".join(text)
+
 
 def read_docx(path) :
     if docx is None :
