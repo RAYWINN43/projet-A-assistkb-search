@@ -26,7 +26,7 @@ def read_pdf(path) :
         with pdfplumber.open(path) as pdf_file :
             text = []
             for page in pdf_file.pages :
-                    if page.extract_text != None :
+                    if page.extract_text() != None :
                         text.append(page.extract_text())
             return "\n".join(text)
     except :
