@@ -1,7 +1,12 @@
 import os
 import json
 from pathlib import Path
-from langdetect import detect, DetectorFactory
+
+try :
+    from langdetect import detect, DetectorFactory
+    DetectorFactory.seed = 0
+except :
+    detect = None
 
 try :
     import pdfplumber
@@ -13,7 +18,6 @@ try :
 except :
     csv = None
 
-DetectorFactory.seed = 0
 
 def read_txt(path) :
     with open(path, 'r', encoding='utf-8', errors='ignore') as f :
@@ -26,8 +30,9 @@ def read_pdf(path) :
         with pdfplumber.open(path) as pdf_file :
             text = []
             for page in pdf_file.pages :
-                    if page.extract_text != None :
-                        text.append(page.extract_text())
+                    text_prov = page.extract_text()
+                    if text_prov != None :
+                        text.append(text_prov)
             return "\n".join(text)
     except :
         return ''
@@ -58,6 +63,8 @@ def chunk_text(text, chunk_size=800, overlap=120) :
 
 
 def detect_lang(text) :
+    if detect == None :
+        return 'unknown'
     try :
         return detect(text)
     except :
