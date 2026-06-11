@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import os
 from typing import Any
 
@@ -56,3 +57,26 @@ class Retriever:
             )
 
         return results
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Recherche vectorielle dans Qdrant.")
+    parser.add_argument("question", help="Question a rechercher dans le corpus indexe")
+    parser.add_argument("--top-k", type=int, default=5)
+    parser.add_argument("--threshold", type=float, default=None)
+    args = parser.parse_args()
+
+    retriever = Retriever(threshold=args.threshold)
+    hits = retriever.search(args.question, top_k=args.top_k)
+
+    if not hits:
+        print("Aucun chunk au-dessus du seuil.")
+        return
+
+    for hit in hits:
+        preview = hit["text"].replace("\n", " ")[:180]
+        print(f"[{hit['score']:.3f}] {hit['source']} :: {preview}")
+
+
+if __name__ == "__main__":
+    main()
