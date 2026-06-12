@@ -8,6 +8,7 @@ WORKDIR /app
 
 COPY pyproject.toml ./
 COPY app ./app
+COPY index.html ./
 
 RUN pip install --upgrade pip && pip install .
 
