@@ -40,14 +40,11 @@ docker compose build --no-cache api
 Indexer le corpus depuis les conteneurs :
 
 ```bash
+docker compose up -d qdrant 
 docker compose run --rm api python -m app.ingest
 docker compose run --rm api python -m app.embed
-```
-
-Tester la recherche seule :
-
-```bash
-docker compose run --rm api python -m app.retrieve "outils IA redaction" --top-k 5
+docker compose up -d api
+docker exec assistkb-api grep -A 3 "def root" /app/app/api.py
 ```
 Verifier que l'API voit la configuration Groq :
 
@@ -55,10 +52,10 @@ Verifier que l'API voit la configuration Groq :
 curl http://localhost:8000/health
 ```
 
-Interroger l'API :
+Test de L'api :
 
 ```bash
-vous pouvez tester l'API via ce lien http://localhost:8000/docs#/default/ask_ask_post
+curl http://localhost:8000
 ```
 
 En cas d'erreur API, lire les logs :
