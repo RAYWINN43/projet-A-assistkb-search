@@ -1,0 +1,14 @@
+.env
+.git
+.pytest_cache
+.mypy_cache
+.ruff_cache
+__pycache__/
+*.py[cod]
+.Python
+.venv/
+venv/
+env/
+corpus/raw/
+corpus/chunks.jsonl
+*.log
