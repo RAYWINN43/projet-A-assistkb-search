@@ -38,9 +38,9 @@ def _get_client() -> OpenAI:
     return OpenAI(api_key=api_key, base_url=GROQ_BASE_URL)
 
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+# client = genai.Client(
+#     api_key=os.getenv("GEMINI_API_KEY")
+# )
 def build_prompt(question: str, sources: list[dict]) -> str:
     context = "\n\n".join(
         f"[Source {index + 1}] {source['source']}\n{source['text']}"

@@ -49,17 +49,16 @@ Tester la recherche seule :
 ```bash
 docker compose run --rm api python -m app.retrieve "outils IA redaction" --top-k 5
 ```
-
-Interroger l'API :
-
-```bash
-curl -X POST http://localhost:8000/ask -H "Content-Type: application/json" -d "{\"question\":\"outils IA redaction\",\"top_k\":5}"
-```
-
 Verifier que l'API voit la configuration Groq :
 
 ```bash
 curl http://localhost:8000/health
+```
+
+Interroger l'API :
+
+```bash
+vous pouvez tester l'API via ce lien http://localhost:8000/docs#/default/ask_ask_post
 ```
 
 En cas d'erreur API, lire les logs :
