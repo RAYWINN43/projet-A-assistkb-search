@@ -18,8 +18,6 @@ class GenerationError(RuntimeError):
 
 def _safe_error_message(exc: Exception) -> str:
     message = str(exc)
-    message = re.sub(r"AIza[0-9A-Za-z_-]+", "<redacted>", message)
-    message = re.sub(r"xai-[0-9A-Za-z_-]+", "<redacted>", message)
     message = re.sub(r"gsk_[0-9A-Za-z_-]+", "<redacted>", message)
     message = re.sub(r"(?i)(api[_-]?key=)[^&\s]+", r"\1<redacted>", message)
     if len(message) > 500:
