@@ -1,7 +1,10 @@
 import logging
 import time
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
 from app.generate import GenerationError, MODEL_NAME, generate_answer, is_groq_configured
@@ -10,6 +13,21 @@ from app.retrieve import Retriever
 
 app = FastAPI(title="AssistKB-Neosoft RAG API")
 logger = logging.getLogger(__name__)
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/", response_class=HTMLResponse)
+def root():
+    html_path = ROOT_DIR / "index.html"
+    return HTMLResponse(content=html_path.read_text(encoding="utf-8"))
 
 
 class AskRequest(BaseModel):
