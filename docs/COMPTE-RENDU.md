@@ -109,7 +109,11 @@ La réponse finale contient la réponse générée, les sources utilisées, la l
 
 ## 8. Difficultés et limites
 
-Ce qui n'a pas marche, ce que vous feriez avec plus de temps.
+Au départ, nous avions choisi Gemini pour la génération des réponses, car nous pensions que ce serait gratuite. Finalement, ce  n’était pas la cas, et nous avons basculer vers Groq. Cette transition a demandé des ajustements au niveau de la clé API, du modèle et du code de génération.
+
+Nous avons aussi eu des problèmes liés au temps de lancement, notamment à cause du chargement du modèle ( 20 minute a chaque docker up ). La connexion entre l’interface HTML et l’API FastAPI a également été compliquée.
+
+pour les amelioration, il faudrait intégrer davantage de formats de fichiers, permettre l’utilisation d’un corpus plus large, améliorer la propreté des réponses générées et citer les sources de manière plus claire, sans afficher trop de détails techniques.
 
 ---
 
